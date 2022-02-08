@@ -1,19 +1,19 @@
 <?php
 
-function cf($n, $d)
+function cf($input_numerator, $input_denominator)
 {
-	$rem = $d;
-	$num = $n;
-	$ds = [];
+	$remainder = $input_denominator;
+	$numerator = $input_numerator;
+	$fraction = [];
 	
-	while ($rem != 0) {
-		$ds[] = (int)($num / $rem);
-		$den = $rem;
-		$rem = $num % $rem;
-		$num = $den;
+	while ($remainder != 0) {
+		$fraction[] = (int)($numerator / $remainder);
+		$denominator = $remainder;
+		$remainder = $numerator % $remainder;
+		$numerator = $denominator;
 	}
 	
-	echo "[" . implode(', ', $ds) . "]";
+	echo "[" . implode(', ', $fraction) . "]";
 }
 
 echo cf(3, 19);
