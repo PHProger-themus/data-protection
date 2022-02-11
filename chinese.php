@@ -2,33 +2,48 @@
 
 function chinese($nums, $rems)
 {
-	$an = explode(',', $nums);
-	$ar = explode(',', $rems);
-	$x = 1;
-	$count = count($an);
-	
-    while (true) {
-		
-		if($x == 1000) {
-			$x = 'Решения нет';
-			break;
-		}
-		
-        for ($j = 0; $j < $count; $j++) {
-			if ($x%$an[$j] != $ar[$j]) {
+	$arNums = explode(',', $nums);
+	$arRems = explode(',', $rems);
+	if(count($arNums) != count($arRems))
+	{
+		return 'Количество чисел m должно быть равно количеству r';
+	}
+	$arParams = [];
+	$m0 = 1;
+	foreach($arRems as $key => $m)
+	{
+		$m0 *= $m;
+		$arParams['a'][] = $arNums[$key];
+		$arParams['m'][] = $arRems[$key];
+	}
+	unset($key);
+	for($i = 0; $i < count($arRems); $i++)
+	{
+		$arParams['n'][] = $m0 / $arParams['m'][$i];
+	}
+	foreach($arParams['n'] as $key => $n)
+	{
+		$arParams['y'][$key] = 0;
+		$resFound = 0;
+		while ($resFound == 0)
+		{
+			$arParams['y'][$key]++;
+			if ((($arParams['n'][$key] * $arParams['y'][$key] - $arParams['a'][$key]) % $arParams['m'][$key]) == 0)
+			{
+				$resFound = 1;
+			}
+			if ($arParams['y'][$key] == 1000)
+			{
 				break;
 			}
 		}
-
-        if ($j == $count) {
-			return $x;
-		}
-
-        $x++;
-		
-    }
-
-    return $x;
+	}
+	$result = 0;
+	foreach($arParams['n'] as $key => $n)
+	{
+		$result += $n * $arParams['y'][$key];
+	}
+	return $result % $m0;
 }
 
-echo chinese('1020,1020,1020', '204,60,85'); // Нет решения
+echo chinese('2,15,5', '5,17,12'); // 797
